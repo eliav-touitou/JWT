@@ -20,8 +20,8 @@ const INFORMATION = [
   },
 ];
 const REFRESHTOKENS = [];
-const ACCESS_TOKEN_SECRET = 12345;
-const REFRESH_TOKEN_SECRET = 54321;
+
+/////////////////////////////////////////////////////////////////
 
 app.post("/users/register", (req, res) => {
   const body = req.body;
@@ -74,14 +74,14 @@ app.post("/users/login", (req, res) => {
 
       const accessToken = sign(
         { result: { isAdmin, email, name } },
-        ACCESS_TOKEN_SECRET,
+        "Eliav54321",
         {
           expiresIn: "10s",
         }
       );
       const refreshToken = sign(
         { result: { isAdmin, email, name } },
-        REFRESH_TOKEN_SECRET,
+        "54321Eliav",
         {
           expiresIn: "1d",
         }
@@ -105,7 +105,7 @@ app.post("/users/tokenValidate", (req, res) => {
   if (token) {
     // Remove Bearer from string
     token = token.slice(7);
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
+    jwt.verify(token, "Eliav54321", (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid Access Token" });
       } else {
@@ -119,9 +119,10 @@ app.post("/users/tokenValidate", (req, res) => {
 });
 
 app.get("/api/v1/information", (req, res) => {
-  let token = req.get("authorization").slice(7);
+  let token = req.get("authorization");
   if (token) {
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
+    token = token.slice(7);
+    jwt.verify(token, "Eliav54321", (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid Access Token" });
       } else {
@@ -138,7 +139,7 @@ app.post("/users/token", (req, res) => {
   if (token) {
     const refToken = REFRESHTOKENS.includes(token);
     if (refToken) {
-      const accessToken = sign({ result: user }, ACCESS_TOKEN_SECRET, {
+      const accessToken = sign({ result: user }, "Eliav54321", {
         expiresIn: "10s",
       });
       return res.status(200).json({ accessToken });
@@ -166,9 +167,10 @@ app.post("/users/logout", (req, res) => {
 });
 
 app.get("/api/v1/users", (req, res) => {
-  let token = req.get("authorization").slice(7);
+  let token = req.get("authorization");
   if (token) {
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
+    token = token.slice(7);
+    jwt.verify(token, "Eliav54321", (err, decoded) => {
       if (err) {
         return res.status(403).json({ message: "Invalid Access Token" });
       } else {
@@ -180,4 +182,4 @@ app.get("/api/v1/users", (req, res) => {
   }
 });
 
-module.exports = { app, ACCESS_TOKEN_SECRET };
+module.exports = app;

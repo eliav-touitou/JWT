@@ -2,7 +2,6 @@ const express = require("express");
 const route = require("./rout");
 const jwt = require("jsonwebtoken");
 const app = express();
-const { ACCESS_TOKEN_SECRET } = require("./rout");
 const optionsArr = [
   {
     method: "post",
@@ -58,7 +57,7 @@ app.options("/", (req, res) => {
   }
   token = token.slice(7);
 
-  jwt.verify(token, ACCESS_TOKEN_SECRET, (err, decoded) => {
+  jwt.verify(token, "Eliav54321", (err, decoded) => {
     if (err) {
       return res.status(200).json(optionsArr.slice(0, 3));
     }
